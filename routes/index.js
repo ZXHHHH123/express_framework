@@ -13,6 +13,9 @@ router.get('/goods', doController.test.getGoods);
 
 router.post('/login1', doController.test.login);
 
+/*jwttest*/
+router.post('/jwttest', doController.test.jwttest);
+
 
 
 

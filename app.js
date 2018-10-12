@@ -1,19 +1,21 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+let createError = require('http-errors');
+let express = require('express');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var goodsRouter = require('./routes/goods');
 
-var app = express();
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
 
-var allowCrossDomain = function (req, res, next) {
+let indexRouter = require('./routes/index');
+let usersRouter = require('./routes/users');
+let goodsRouter = require('./routes/goods');
+
+let app = express();
+
+let allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*'); //必须重新设置，把origin的域加上去
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization,x-access-token');
     res.header('Access-Control-Allow-Credentials', 'true');//和客户端对应，必须设置以后，才能接收cookie.
     next();
 };
@@ -24,6 +26,9 @@ app.use(allowCrossDomain);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+
+
 
 app.use(logger('dev'));
 app.use(express.json());
