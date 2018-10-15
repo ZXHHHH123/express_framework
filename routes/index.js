@@ -16,6 +16,10 @@ router.post('/login1', doController.test.login);
 /*jwttest*/
 router.post('/jwttest', doController.test.jwttest);
 
+/*爬取数据*/
+router.get('/grap', doController.test.grap);
+
+
 
 
 

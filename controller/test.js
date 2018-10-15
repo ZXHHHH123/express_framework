@@ -2,6 +2,9 @@ let model = require('./../models/model');
 let jwt = require('jwt-simple');
 let systemConf = require('./../config/systemconf');
 let crypto = require('crypto');
+let http = require('http');
+let https = require('https');
+let cheerio = require('cheerio');
 
 
 async function addtest(req, res, next) {
@@ -116,7 +119,7 @@ async function getGoods(req, res, next) {
             })
         }
     })
-};
+}
 
 async function jwttest(req, res, next) {
     console.log('jwtTestStart--------------');
@@ -157,11 +160,43 @@ async function jwttest(req, res, next) {
 
 }
 
+async function grap(req, res, next) {
+    console.log('开始爬取数据');
+    let Res = res;
+    http.get('http://news.baidu.com/', (res) => {
+        let chunks = [];
+        let size = 0;
+        res.on('data', function (chunk) {   //监听事件 传输
+            chunks.push(chunk);
+            size += chunk.length;
+        });
+        res.on('end',function(){  //数据传输完
+            let data = Buffer.concat(chunks,size);
+            let html = data.toString();
+            // console.log(html);
+            let $ = cheerio.load(html,{decodeEntities: false}); //cheerio模块开始处理 DOM处理
+            let arr = [];
+            $('.hotnews li a').each(function(key,value){
+                console.log($(this).html());
+                arr.push({
+                    title:$(this).html(),
+                    url:$(this).attr('href'),
+                })
+            });
+            console.log(arr);
+            Res.json({  //返回json格式数据给浏览器端
+                data:arr
+            });
+        });
+    })
+}
+
 
 
 module.exports = {
     addtest,
     login,
     getGoods,
-    jwttest
+    jwttest,
+    grap
 }
